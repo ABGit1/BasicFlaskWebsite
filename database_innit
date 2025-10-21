@@ -1,0 +1,36 @@
+import sqlite3
+
+conn = sqlite3.connect('users.db')
+c = conn.cursor()
+
+#create the database if it doesn't exist
+# column name , data type, constraints <- format
+
+# Users table using sqlite3
+c.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    password BLOB NOT NULL,
+    role TEXT NOT NULL,
+    encryption_key TEXT NOT NULL
+)
+''')
+
+# Tasks table using sqlite3 
+c.execute('''
+CREATE TABLE IF NOT EXISTS tasks ( 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT,
+    assigned_to INTEGER,
+    status TEXT,
+    FOREIGN KEY (assigned_to) REFERENCES users(id)
+)
+''')
+
+conn.commit()
+conn.close()
+
+print("Database initialized!")
+
